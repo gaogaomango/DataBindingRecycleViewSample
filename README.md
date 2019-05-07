@@ -1,1 +1,1 @@
-'#DataBindingRecycleViewSample' 
+#DataBindingRecycleViewSample
