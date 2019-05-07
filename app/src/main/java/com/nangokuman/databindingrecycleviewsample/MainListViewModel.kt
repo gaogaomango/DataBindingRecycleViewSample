@@ -34,6 +34,7 @@ class MainListViewModel {
     )
     sealed class ListItem {
         abstract fun getType(): Type
+
         enum class Type(val id: Int) {
             Caption(10),
             SubCaption(20),

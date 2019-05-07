@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.nangokuman.databindingrecycleviewsample.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -41,6 +42,11 @@ class MainFragment : Fragment() {
         val recycleView = fragmentMainBinding?.recyclerView
         viewListViewModel?.listItems?.also {
             mainListRecycleViewAdapter = MainListRecycleViewAdapter(it)
+            mainListRecycleViewAdapter?.setOnItemClickListener(object: MainListRecycleViewAdapter.OnCategoryItemClickListener {
+                override fun onCategoryItemClick(view: View, listItem: MainListViewModel.ListItem.CategoryItem) {
+                    Toast.makeText(requireContext(), listItem.title, Toast.LENGTH_LONG).show()
+                }
+            })
             recycleView?.adapter = mainListRecycleViewAdapter
         }
     }

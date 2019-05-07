@@ -2,12 +2,15 @@ package com.nangokuman.databindingrecycleviewsample
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.nangokuman.databindingrecycleviewsample.databinding.CaptionItemBinding
 import com.nangokuman.databindingrecycleviewsample.databinding.CategoryItemBinding
 import com.nangokuman.databindingrecycleviewsample.databinding.SubCaptionItemBinding
 
 class MainListRecycleViewAdapter(private var items: List<MainListViewModel.ListItem>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    lateinit var listenerCategory: OnCategoryItemClickListener
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when(MainListViewModel.ListItem.Type.from(viewType)) {
             MainListViewModel.ListItem.Type.Caption -> {
@@ -19,6 +22,7 @@ class MainListRecycleViewAdapter(private var items: List<MainListViewModel.ListI
                 return SubCaptionItemViewHolder(binding)
             }
             MainListViewModel.ListItem.Type.Category -> {
+                setOnItemClickListener(listenerCategory)
                 val binding = CategoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return CategoryItemViewHolder(binding)
             }
@@ -38,6 +42,9 @@ class MainListRecycleViewAdapter(private var items: List<MainListViewModel.ListI
             }
             holder is CategoryItemViewHolder && item is MainListViewModel.ListItem.CategoryItem -> {
                 holder.binding.item = item
+                holder.binding.root.setOnClickListener{
+                    listenerCategory.onCategoryItemClick(it, item)
+                }
             }
         }
     }
@@ -51,4 +58,11 @@ class MainListRecycleViewAdapter(private var items: List<MainListViewModel.ListI
     private inner class SubCaptionItemViewHolder(val binding: SubCaptionItemBinding): RecyclerView.ViewHolder(binding.root)
     private inner class CategoryItemViewHolder(val binding: CategoryItemBinding): RecyclerView.ViewHolder(binding.root)
 
+    interface OnCategoryItemClickListener {
+        fun onCategoryItemClick(view: View, listItem: MainListViewModel.ListItem.CategoryItem)
+    }
+
+    fun setOnItemClickListener(listenerCategory: OnCategoryItemClickListener) {
+        this.listenerCategory = listenerCategory
+    }
 }
